@@ -11,8 +11,17 @@ public class Scraper {
     public static void main(String args[]) throws IOException, ClassNotFoundException {
         Date date = new Date(System.currentTimeMillis());
         WebDriver driver;
+        System.out.println(System.getProperty("os.name"));
+        switch(System.getProperty("os.name")){
+            case "Windows 10":
+                System.setProperty("webdriver.chrome.driver","src\\libs\\chromedriver.exe");
+                break;
+            default:
+                System.setProperty("webdriver.chrome.driver","src\\libs\\chromedriver");
+                break;
+        }
         // get driver and open browser
-        System.setProperty("webdriver.chrome.driver","C:\\Users\\djcma\\Desktop\\IntelliJWorkspace\\libs\\chromedriver.exe");
+
         driver = new ChromeDriver();
         driver.manage().window().setPosition(new Point(10000000, 0));
         //driver.manage().window().setPosition(new Point(0, 0));
