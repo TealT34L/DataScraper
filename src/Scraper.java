@@ -105,6 +105,7 @@ public class Scraper {
                 ArrayList<Campus> campus = schoolsCon.get(name);
 
                 PrintWriter pw = new PrintWriter(new File(name + ".csv"));
+                pw.println("Campus Name, Campus Type, On Campus Cases, Off Campus Cases, Staff Cases, Total Cases, Date");
                 for (Campus c : campus){
                     pw.println(c.toString());
                 }
@@ -155,9 +156,9 @@ public class Scraper {
         WebDriver driver;
         //System.out.println(System.getProperty("os.name"));
         if ("Windows 10".equals(System.getProperty("os.name"))) {
-            System.setProperty("webdriver.chrome.driver", "src\\libs\\chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "libs\\chromedriver.exe");
         } else if ("Linux".equals(System.getProperty("os.name"))) {
-            System.setProperty("webdriver.chrome.driver", "src\\libs\\chromedriver");
+            System.setProperty("webdriver.chrome.driver", "libs\\chromedriver");
         }
         // get driver and open browser
 
