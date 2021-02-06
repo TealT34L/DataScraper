@@ -11,10 +11,10 @@ public class Scraper {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         Date date = new Date(System.currentTimeMillis());
         WebDriver driver;
-        System.out.println(System.getProperty("os.name"));
+        //System.out.println(System.getProperty("os.name"));
         if ("Windows 10".equals(System.getProperty("os.name"))) {
             System.setProperty("webdriver.chrome.driver", "src\\libs\\chromedriver.exe");
-        } else {
+        } else if ("Linux".equals(System.getProperty("os.name"))) {
             System.setProperty("webdriver.chrome.driver", "src\\libs\\chromedriver");
         }
         // get driver and open browser
