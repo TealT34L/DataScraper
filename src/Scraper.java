@@ -2,13 +2,155 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Scraper {
 
-//look back at selenium
-
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+        boolean again = true;
+        while (again) {
+            Scanner input = new Scanner(System.in);
+            String line;
+            if (args.length != 0){
+                line = args[0].replaceAll("-", "");
+            }
+            else {
+                System.out.println("Enter action you want (Update/ReadOut/CSVCampus/AutoUpdate/stop/help): ");
+                line = input.nextLine();
+            }
+            switch(line){
+                case "Update":
+                    updateData();
+                    break;
+                case "ReadOut":
+                    readOut(new File("data.dat"));
+                    break;
+                case "CSVCampus":
+                    csvCampus();
+                    break;
+                case "AutoUpdate":
+                    automated();
+                    break;
+                case "stop":
+                    again = false;
+                    break;
+                case "help":
+                    System.out.println("Update: Check website and data.dat file\n" +
+                            "ReadOut: Reads out data.dat file\n" +
+                            "CSVCampus: Asks for a campus name and creates a csv of the data for that campus\n" +
+                            "AutoUpdate: updates the data file every 24\n" +
+                            "stop: stops the program");
+                    break;
+                default:
+                    System.out.println("Command not understood,");
+                    break;
+
+            }
+        }
+    }
+
+    private static void automated() {
+        LocalDateTime time = LocalDateTime.now();
+        Timer timer = new Timer ();
+        TimerTask t = new TimerTask () {
+            @Override
+            public void run () {
+                try {
+                    updateData();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        long milToMidnight = (time.getHour() * 60 + time.getMinute())*1000*60;
+        timer.schedule(t, milToMidnight, 86400000 );
+    }
+
+    public static void csvCampus() throws IOException, ClassNotFoundException {
+        ArrayList<DaysData> data = read(new File("data.dat"));
+
+        for (DaysData d : data){
+            d.createTable();
+        }
+
+        ArrayList<Campus> campuses = data.get(0).getCampuses();
+        ArrayList<String> names = new ArrayList<>();
+
+        for (Campus c : campuses){
+            names.add(c.getName());
+        }
+
+        Hashtable<String, ArrayList<Campus>> schoolsCon = new Hashtable<>();
+
+        for (String s : names){
+            ArrayList<Campus> campusesByName = new ArrayList<>();
+            for (DaysData d : data){
+                campusesByName.add(d.getCampus(s));
+            }
+            Collections.sort(campusesByName);
+            schoolsCon.put(s, campusesByName);
+        }
+
+        Scanner in = new Scanner(System.in);
+
+        boolean again = true;
+        while (again) {
+            System.out.println("Enter name of school for comparison:");
+            String name = in.nextLine();
+            try {
+                ArrayList<Campus> campus = schoolsCon.get(name);
+
+                PrintWriter pw = new PrintWriter(new File(name + ".csv"));
+                for (Campus c : campus){
+                    pw.println(c.toString());
+                }
+                pw.close();
+
+                System.out.println(campus.toString());
+                System.out.println("\nWould you like to compare another campus? (enter y or n)");
+                again = in.nextLine().equals("y");
+            } catch (NullPointerException e) {
+                System.out.println("School does not exist");
+            }
+        }
+    }
+
+    public static ArrayList<DaysData> readOut(File file) throws IOException, ClassNotFoundException {
+        FileInputStream in = new FileInputStream(file);
+        ObjectInputStream obj = new ObjectInputStream(in);
+        ArrayList<DaysData> data = new ArrayList<>();
+        Object next;
+        try{
+            while (((next = obj.readObject()) instanceof DaysData)){
+                data.add((DaysData) next);
+            }} catch(EOFException e){
+            System.out.println(e);
+        }
+        System.out.println("Number of data sets: " + data.size());
+        for (DaysData d : data){
+            System.out.println(d.toString());
+        }
+        return data;
+    }
+
+    public static ArrayList<DaysData> read(File file) throws IOException, ClassNotFoundException {
+        FileInputStream in = new FileInputStream(file);
+        ObjectInputStream obj = new ObjectInputStream(in);
+        ArrayList<DaysData> data = new ArrayList<>();
+        Object next;
+        try{
+            while (((next = obj.readObject()) instanceof DaysData)){
+                data.add((DaysData) next);
+            }} catch(EOFException e){
+        }
+        return data;
+    }
+
+    public static void updateData() throws IOException, ClassNotFoundException {
         Date date = new Date(System.currentTimeMillis());
         WebDriver driver;
         //System.out.println(System.getProperty("os.name"));
@@ -85,7 +227,6 @@ public class Scraper {
         obj.close(); out.close();
 
         driver.close();
-
     }
 
 }
