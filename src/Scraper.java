@@ -8,17 +8,14 @@ public class Scraper {
 
 //look back at selenium
 
-    public static void main(String args[]) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         Date date = new Date(System.currentTimeMillis());
         WebDriver driver;
         System.out.println(System.getProperty("os.name"));
-        switch(System.getProperty("os.name")){
-            case "Windows 10":
-                System.setProperty("webdriver.chrome.driver","src\\libs\\chromedriver.exe");
-                break;
-            default:
-                System.setProperty("webdriver.chrome.driver","src\\libs\\chromedriver");
-                break;
+        if ("Windows 10".equals(System.getProperty("os.name"))) {
+            System.setProperty("webdriver.chrome.driver", "src\\libs\\chromedriver.exe");
+        } else {
+            System.setProperty("webdriver.chrome.driver", "src\\libs\\chromedriver");
         }
         // get driver and open browser
 
@@ -70,7 +67,7 @@ public class Scraper {
                     days.add((DaysData) next);
                 }
             } catch (EOFException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
 
             obin.close();
