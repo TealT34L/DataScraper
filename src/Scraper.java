@@ -7,6 +7,9 @@ import java.util.*;
 
 public class Scraper {
 
+    private static Timer timer;
+
+
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         boolean again = true;
         while (again) {
@@ -41,7 +44,7 @@ public class Scraper {
                     csvCampus(file);
                     break;
                 case "AutoUpdate":
-                    automated();
+                    again = automated();
                     break;
                 case "stop":
                     again = false;
@@ -61,13 +64,14 @@ public class Scraper {
         }
     }
 
-    private static void automated() {
+    private static boolean automated() {
         LocalDateTime time = LocalDateTime.now();
-        Timer timer = new Timer ();
+        timer = new Timer ();
         TimerTask t = new TimerTask () {
             @Override
             public void run () {
                 try {
+                    System.out.println("Updating... \t" + LocalDateTime.now());
                     updateData();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -77,8 +81,11 @@ public class Scraper {
 
             }
         };
+        System.out.println("Initializing automation... \t" + LocalDateTime.now());
         long milToMidnight = (time.getHour() * 60 + time.getMinute())*1000*60;
-        timer.schedule(t, milToMidnight, 86400000 );
+        System.out.println("Time until first update: " + (milToMidnight/1000) + " seconds");
+        timer.schedule(t, milToMidnight, 86400000);
+        return false;
     }
 
     public static void csvCampus(File file) throws IOException, ClassNotFoundException {
