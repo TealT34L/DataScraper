@@ -23,43 +23,37 @@ public class Scraper {
                 line = input.nextLine();
             }
             File file;
-            switch(line){
-                case "Update":
-                    updateData();
-                    break;
-                case "ReadOut":
+            switch (line) {
+                case "Update" -> updateData();
+                case "ReadOut" -> {
                     file = new File("data.dat");
-                    if (!file.exists()){
+                    if (!file.exists()) {
                         System.out.println("data.dat file not found, enter .dat file location:");
                         file = new File(input.nextLine());
                     }
                     readOut(file);
-                    break;
-                case "CSVCampus":
+                }
+                case "CSVCampus" -> {
                     file = new File("data.dat");
-                    if (!file.exists()){
+                    if (!file.exists()) {
                         System.out.println("data.dat file not found, enter .dat file location:");
                         file = new File(input.nextLine());
                     }
                     csvCampus(file);
-                    break;
-                case "AutoUpdate":
-                    again = automated();
-                    break;
-                case "stop":
+                }
+                case "AutoUpdate" -> again = automated();
+                case "stop" -> {
+                    if (timer != null) {
+                        timer.cancel();
+                    }
                     again = false;
-                    break;
-                case "help":
-                    System.out.println("Update: Check website and data.dat file\n" +
-                            "ReadOut: Reads out data.dat file\n" +
-                            "CSVCampus: Asks for a campus name and creates a csv of the data for that campus\n" +
-                            "AutoUpdate: updates the data file every 24\n" +
-                            "stop: stops the program");
-                    break;
-                default:
-                    System.out.println("Command not understood,");
-                    break;
-
+                }
+                case "help" -> System.out.println("Update: Check website and data.dat file\n" +
+                        "ReadOut: Reads out data.dat file\n" +
+                        "CSVCampus: Asks for a campus name and creates a csv of the data for that campus\n" +
+                        "AutoUpdate: updates the data file every 24\n" +
+                        "stop: stops the program");
+                default -> System.out.println("Command not understood,");
             }
         }
     }
@@ -73,9 +67,7 @@ public class Scraper {
                 try {
                     System.out.println("Updating... \t" + LocalDateTime.now());
                     updateData();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
 
@@ -138,6 +130,7 @@ public class Scraper {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static ArrayList<DaysData> readOut(File file) throws IOException, ClassNotFoundException {
         FileInputStream in = new FileInputStream(file);
         ObjectInputStream obj = new ObjectInputStream(in);
@@ -146,8 +139,9 @@ public class Scraper {
         try{
             while (((next = obj.readObject()) instanceof DaysData)){
                 data.add((DaysData) next);
-            }} catch(EOFException e){
-            System.out.println(e);
+            }
+        } catch(EOFException e){
+            e.printStackTrace();
         }
         System.out.println("Number of data sets: " + data.size());
         for (DaysData d : data){
@@ -164,7 +158,9 @@ public class Scraper {
         try{
             while (((next = obj.readObject()) instanceof DaysData)){
                 data.add((DaysData) next);
-            }} catch(EOFException e){
+            }
+        } catch(EOFException e) {
+            e.printStackTrace();
         }
         return data;
     }
