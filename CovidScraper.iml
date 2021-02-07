@@ -10,30 +10,30 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/src/libs/selenium" />
+          <root url="file://$MODULE_DIR$/libs/selenium" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/src/libs/selenium" />
+          <root url="file://$MODULE_DIR$/libs/selenium" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/src/libs/selenium" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/src/libs/selenium" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/selenium" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/selenium" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/src/libs/selenium/libs" />
+          <root url="file://$MODULE_DIR$/libs/selenium/libs" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/src/libs/selenium/libs" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/selenium/libs" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/libs/jsoup-1.13.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/jsoup-1.13.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

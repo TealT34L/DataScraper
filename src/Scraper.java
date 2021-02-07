@@ -19,15 +19,26 @@ public class Scraper {
                 System.out.println("Enter action you want (Update/ReadOut/CSVCampus/AutoUpdate/stop/help): ");
                 line = input.nextLine();
             }
+            File file;
             switch(line){
                 case "Update":
                     updateData();
                     break;
                 case "ReadOut":
-                    readOut(new File("data.dat"));
+                    file = new File("data.dat");
+                    if (!file.exists()){
+                        System.out.println("data.dat file not found, enter .dat file location:");
+                        file = new File(input.nextLine());
+                    }
+                    readOut(file);
                     break;
                 case "CSVCampus":
-                    csvCampus();
+                    file = new File("data.dat");
+                    if (!file.exists()){
+                        System.out.println("data.dat file not found, enter .dat file location:");
+                        file = new File(input.nextLine());
+                    }
+                    csvCampus(file);
                     break;
                 case "AutoUpdate":
                     automated();
@@ -70,8 +81,8 @@ public class Scraper {
         timer.schedule(t, milToMidnight, 86400000 );
     }
 
-    public static void csvCampus() throws IOException, ClassNotFoundException {
-        ArrayList<DaysData> data = read(new File("data.dat"));
+    public static void csvCampus(File file) throws IOException, ClassNotFoundException {
+        ArrayList<DaysData> data = read(file);
 
         for (DaysData d : data){
             d.createTable();
@@ -156,9 +167,29 @@ public class Scraper {
         WebDriver driver;
         //System.out.println(System.getProperty("os.name"));
         if ("Windows 10".equals(System.getProperty("os.name"))) {
-            System.setProperty("webdriver.chrome.driver", "libs\\chromedriver.exe");
+            String file;
+            if (new File("libs\\chromedriver.exe").exists()){
+                file = "libs\\chromedriver.exe";
+            } else if (new File("chromedriver.exe").exists()) {
+                file = "chromedriver.exe";
+            } else {
+                Scanner input = new Scanner(System.in);
+                System.out.println("chromedriver.exe not found, enter path to chromedriver.exe:");
+                file = input.nextLine();
+            }
+            System.setProperty("webdriver.chrome.driver", file);
         } else if ("Linux".equals(System.getProperty("os.name"))) {
-            System.setProperty("webdriver.chrome.driver", "libs\\chromedriver");
+            String file;
+            if (new File("libs\\chromedriver").exists()){
+                file = "libs\\chromedriver";
+            } else if (new File("chromedriver").exists()) {
+                file = "chromedriver";
+            } else {
+                Scanner input = new Scanner(System.in);
+                System.out.println("chromedriver not found, enter path to chromedriver:");
+                file = input.nextLine();
+            }
+            System.setProperty("webdriver.chrome.driver", file);
         }
         // get driver and open browser
 
