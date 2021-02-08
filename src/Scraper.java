@@ -8,9 +8,13 @@ import java.util.*;
 public class Scraper {
 
     private static Timer timer;
+    private static String chromePath = null;
 
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+        if (new File("path.txt").exists()){
+            chromePath = new Scanner(new File("path.txt")).nextLine();
+        }
         boolean again = true;
         while (again) {
             Scanner input = new Scanner(System.in);
@@ -175,10 +179,13 @@ public class Scraper {
                 file = "libs\\chromedriver.exe";
             } else if (new File("chromedriver.exe").exists()) {
                 file = "chromedriver.exe";
+            } else if(chromePath != null){
+                file = chromePath + "";
             } else {
                 Scanner input = new Scanner(System.in);
                 System.out.println("chromedriver.exe not found, enter path to chromedriver.exe:");
                 file = input.nextLine();
+                chromePath = file + "";
             }
             System.setProperty("webdriver.chrome.driver", file);
         } else if ("Linux".equals(System.getProperty("os.name"))) {
@@ -187,10 +194,13 @@ public class Scraper {
                 file = "libs\\chromedriver";
             } else if (new File("chromedriver").exists()) {
                 file = "chromedriver";
+            } else if(chromePath != null){
+                file = chromePath + "";
             } else {
                 Scanner input = new Scanner(System.in);
                 System.out.println("chromedriver not found, enter path to chromedriver:");
                 file = input.nextLine();
+                chromePath = file + "";
             }
             System.setProperty("webdriver.chrome.driver", file);
         }
