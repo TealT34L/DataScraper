@@ -71,6 +71,7 @@ public class Scraper {
                 try {
                     System.out.println("Updating... \t" + LocalDateTime.now());
                     updateData();
+                    System.out.println("Update Complete. \t" + LocalDateTime.now());
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
