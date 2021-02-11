@@ -21,6 +21,7 @@ public class Scraper {
             String line;
             if (args.length != 0){
                 line = args[0].replaceAll("-", "");
+                args = new String[0];
             }
             else {
                 System.out.println("Enter action you want (Update/ReadOut/CSVCampus/AutoUpdate/stop/help): ");
